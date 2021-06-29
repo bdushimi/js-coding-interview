@@ -1,3 +1,9 @@
+/**
+ * Solution: 
+ * Runtime Complexity: O (n)
+ * Memory Complexity : O (w) where w is the window size in this case
+ */
+
 let ffindMaxSlidingWindow = function (arr, windowSize) {
     let result = [];
 
