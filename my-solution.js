@@ -1,40 +1,27 @@
-const findMaxSlidingWindow = (array, window_size) => {
+const binarySearchRotated = (arr, key, min, max) => {
+  
+  let midIndex = 0;
+  
+  if(typeof max == "undefined" && typeof min == "undefined"){
+    min = 0;
+    max = arr.length-1;
+    midIndex = Math.floor(arr.length/2)
+  }
+  else {
+    // New size of the virtual array = (max-min)+1
+    let new_array_size = (max - min) + 1;
+    midIndex = min + Math.floor(new_array_size/2);
+  }
+  if (min == max)
+    return arr[max] == key ? max : -1
+  // Process right side of the array
+  if(arr[midIndex] <= key && arr[max] >= key){
+    return binarySearchRotated(arr,key,midIndex,max)
+  } 
+  // Process left side of the array
+  else{
+   return binarySearchRotated(arr,key, min, midIndex-1)
+  }
+};
 
-    var result = [];
-
-    const window = [];
-
-    window.push(0)
-
-
-    // First Window
-    for (let i = 1; i < window_size; i++) {
-
-        while (window.length > 0 && array[i] >= array[window[window.length - 1]]) {
-            window.pop();
-        }
-        window.push(i);
-    }
-
-    result.push(array[window[0]]);
-
-    // For the reminder of the array
-    for (let i = window_size; i < array.length; i++) {
-
-        // check if the first element/index in the window array is still in window range, if not remove it
-        if (window[0] <= i - window_size) window.shift();
-
-        console.log(array[window[window.length - 1]])
-        while (window.length > 0 && array[i] >= array[window[window.length - 1]]) {
-            window.pop();
-        }
-        window.push(i);
-        result.push(array[window[0]]); // this should happen after processing an individual window.
-    }
-    return result;
-}
-
-
-findMaxSlidingWindow([-4, 2, -5, 1, -1, 6], 3)
-
-
+console.log(binarySearchRotated([4,5,6,1,2,3],1))

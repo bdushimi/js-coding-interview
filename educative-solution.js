@@ -1,47 +1,104 @@
-let ffindMaxSlidingWindow = function (arr, windowSize) {
-    let result = [];
+/*
+Iterative Solution
+Runtime complexity O(log n)
+Memory complexity O(1)
+*/
 
-    if (arr.length == 0) {
-        return result;
+let binarySearchRotated = function(arr, key) {
+
+    start = 0;
+    end = arr.length - 1;
+  
+    if (start > end){
+      return -1;
     }
-
-    if (windowSize > arr.length) {
-        return result;
+  
+    while (start <= end){
+      mid = start + Math.floor((end - start) / 2);
+  
+      if (arr[mid] == key){
+        return mid;
+      }
+  
+      if (arr[start] <= arr[mid] && key <= arr[mid] && key >= arr[start]){
+        end = mid - 1;
+      }
+      
+      else if (arr[mid] <= arr[end] && key >= arr[mid] && key <= arr[end]){
+        start = mid + 1;
+      }
+  
+      else if (arr[end] <= arr[mid]){
+        start = mid + 1;
+      }
+  
+      else if (arr[start] >= arr[mid]){
+        end = mid - 1;
+      }
+      
+      else{
+        return -1;
+      }
     }
+    return -1;
+  };
+  
+  let v1 = [6, 7, 1, 2, 3, 4, 5];
+    
+  console.log("Key(3) found at: " + binarySearchRotated(v1, 3));
+  console.log("Key(6) found at: " + binarySearchRotated(v1, 6));
+      
+  let v2 = [4, 5, 6, 1, 2, 3];
+    
+  console.log("Key(3) found at: " + binarySearchRotated(v2, 3));
+  console.log("Key(6) found at: " + binarySearchRotated(v2, 6));  
 
-    let window_ = [];
-    //find out max for first window
-    for (let i = 0; i < windowSize; i++) {
-        while (window_.length > 0 && arr[i] >= arr[window_[window_.length - 1]]) {
-            window_.pop();
-        }
-        window_.push(i);
+
+  /*
+  Solution 1: Recursive
+  Runtime complexity O(log n)
+  Memory complexity O(log n)
+  */
+
+  let binarySearch = function(arr, start, end, key) {
+    // assuming all the keys are unique.
+    if (start > end) {
+      return -1;
     }
-
-    result.push(arr[window_[0]])
-
-    for (let i = windowSize; i < arr.length; i++) {
-        // remove all numbers that are smaller than current number
-        // from the tail of list
-        while (window_.length > 0 && arr[i] >= arr[window_[window_.length - 1]]) {
-            window_.pop();
-        }
-
-        //remove first number if it doesn't fall in the window anymore
-        if (window_.length > 0 && (window_[0] <= i - windowSize)) {
-            window_.shift();
-        }
-
-        window_.push(i);
-        result.push(arr[window_[0]]);
+  
+    let mid = start + Math.floor((end - start) / 2);
+  
+    if (arr[mid] === key) {
+      return mid;
     }
-    return result;
-};
-
-let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-console.log("Array = " + array);
-console.log("Max = " + ffindMaxSlidingWindow(array, 3));
-
-let array1 = [10, 6, 9, -3, 23, -1, 34, 56, 67, -1, -4, -8, -2, 9, 10, 34, 67]
-console.log("Array = " + array1);
-console.log("Max = " + ffindMaxSlidingWindow(array1, 3));
+  
+    if (arr[start] <= arr[mid] && key <= arr[mid] && key >= arr[start]) {
+      return binarySearch(arr, start, mid - 1, key);
+    } 
+    
+    else if (arr[mid] <= arr[end] && key >= arr[mid] && key <= arr[end]) {
+      return binarySearch(arr, mid + 1, end, key);
+    } 
+    
+    else if (arr[end] <= arr[mid]) {
+      return binarySearch(arr, mid + 1, end, key);
+    } 
+    
+    else if (arr[start] >= arr[mid]) {
+      return binarySearch(arr, start, mid - 1, key);
+    } 
+    
+    return -1;
+  };
+  
+  let binarySearchRotated = function(arr, key) {
+    return binarySearch(arr, 0, arr.length - 1, key);
+  };
+  
+  let v1 = [6, 7, 1, 2, 3, 4, 5];  
+  console.log("Key(3) found at: " + binarySearchRotated(v1, 3));
+  console.log("Key(6) found at: " + binarySearchRotated(v1, 6));
+      
+  let v2 = [4, 5, 6, 1, 2, 3];
+  console.log("Key(3) found at: " + binarySearchRotated(v2, 3));
+  console.log("Key(6) found at: " + binarySearchRotated(v2, 6));  
