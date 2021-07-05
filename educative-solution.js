@@ -1,53 +1,47 @@
-/**
- * Solution: 
- * Runtime Complexity: O (n)
- * Memory Complexity : O (w) where w is the window size in this case
- */
+/*
+Solution #
+Runtime complexity #
+The runtime complexity of the solution is linear, O(n).
 
-let ffindMaxSlidingWindow = function (arr, windowSize) {
-    let result = [];
+Memory complexity #
+The memory complexity of the solution is constant, O(1).
+*/
 
-    if (arr.length == 0) {
-        return result;
+
+let findLeastCommonNumber = function(a, b, c) {
+    let i = 0;
+    let j = 0;
+    let k = 0;
+  
+    while (i < a.length && j < b.length && k < c.length) {
+  
+      // Finding the smallest common number
+      if (a[i] === b[j]
+         && b[j] === c[k]) {
+        return a[i];
+      }
+  
+      // Let's increment the iterator
+      // for the smallest value.
+  
+      if (a[i] <= b[j] && a[i] <= c[k]) {
+        i++;
+      } 
+  
+      else if (b[j] <= a[i] && b[j] <= c[k]) {
+        j++;
+      }
+       
+      else if (c[k] <= a[i] && c[k] <= b[j]) {
+        k++;
+      }
+      
     }
-
-    if (windowSize > arr.length) {
-        return result;
-    }
-
-    let window_ = [];
-    //find out max for first window
-    for (let i = 0; i < windowSize; i++) {
-        while (window_.length > 0 && arr[i] >= arr[window_[window_.length - 1]]) {
-            window_.pop();
-        }
-        window_.push(i);
-    }
-
-    result.push(arr[window_[0]])
-
-    for (let i = windowSize; i < arr.length; i++) {
-        // remove all numbers that are smaller than current number
-        // from the tail of list
-        while (window_.length > 0 && arr[i] >= arr[window_[window_.length - 1]]) {
-            window_.pop();
-        }
-
-        //remove first number if it doesn't fall in the window anymore
-        if (window_.length > 0 && (window_[0] <= i - windowSize)) {
-            window_.shift();
-        }
-
-        window_.push(i);
-        result.push(arr[window_[0]]);
-    }
-    return result;
-};
-
-let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-console.log("Array = " + array);
-console.log("Max = " + ffindMaxSlidingWindow(array, 3));
-
-let array1 = [10, 6, 9, -3, 23, -1, 34, 56, 67, -1, -4, -8, -2, 9, 10, 34, 67]
-console.log("Array = " + array1);
-console.log("Max = " + ffindMaxSlidingWindow(array1, 3));
+  
+    return -1;
+  };
+  
+  let v1 = [6, 7, 10, 25, 30, 63, 64];
+  let v2 = [1, 4, 5, 6, 7, 8, 50];
+  let v3 = [1, 6, 10, 14];
+  console.log("Least Common Number: " + findLeastCommonNumber(v1, v2, v3));

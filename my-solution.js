@@ -1,40 +1,54 @@
-const findMaxSlidingWindow = (array, window_size) => {
+/*
+Solution #
+Runtime complexity #
+The runtime complexity of the solution is linear, O(n).
 
-    var result = [];
+Memory complexity #
+The memory complexity of the solution is constant, O(1).
+*/
 
-    const window = [];
-
-    window.push(0)
-
-
-    // First Window
-    for (let i = 1; i < window_size; i++) {
-
-        while (window.length > 0 && array[i] >= array[window[window.length - 1]]) {
-            window.pop();
-        }
-        window.push(i);
+const findLeastCommonNumber = (a,b,c) => {
+  
+    let a_p = 0;
+    let b_p = 0;
+    let c_p = 0;
+    
+    let counter = 0;
+    
+    while (counter < a.length || counter < b.length || counter < c.length){
+      if(a[a_p] == b[b_p] && b[b_p] == c[c_p]){
+        return a[a_p];
+      }
+      
+      if (a[a_p] <= b[b_p] && a[a_p] <= c[c_p]){
+        if(a_p < a.length)
+          a_p++;
+        
+        if(a[a_p] == b[b_p] && b[b_p] == c[c_p]){
+        return a[a_p];
+      }
+      }
+      
+      if (b[b_p] <= a[a_p] && b[b_p] <= c[c_p]){
+        if(b_p < b.length)
+          b_p++;
+        
+        if(a[a_p] == b[b_p] && b[b_p] == c[c_p]){
+        return a[a_p];
+      }
+      }
+      
+      if (c[c_p] <= a[a_p] && c[c_p] <= b[b_p]){
+        if(c_p < c.length)
+          c_p++;
+        
+        if(a[a_p] == b[b_p] && b[b_p] == c[c_p]){
+        return a[a_p];
+      }
+      }
+      
+      counter++;
     }
-
-    result.push(array[window[0]]);
-
-    // For the reminder of the array
-    for (let i = window_size; i < array.length; i++) {
-
-        // check if the first element/index in the window array is still in window range, if not remove it
-        if (window[0] <= i - window_size) window.shift();
-
-        console.log(array[window[window.length - 1]])
-        while (window.length > 0 && array[i] >= array[window[window.length - 1]]) {
-            window.pop();
-        }
-        window.push(i);
-        result.push(array[window[0]]); // this should happen after processing an individual window.
-    }
-    return result;
-}
-
-
-findMaxSlidingWindow([-4, 2, -5, 1, -1, 6], 3)
-
-
+      
+    return -1;
+  }
