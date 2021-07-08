@@ -1,47 +1,75 @@
-/*
-Solution #
+/**
+ * Solution #
 Runtime complexity #
-The runtime complexity of the solution is linear, O(n).
+Since we are using binary search, the runtime complexity is logarithmic, O(logn)O(logn).
+
+Even though we do the binary search twice, asymptotic runtime complexity is still O(logn)O(logn).
 
 Memory complexity #
-The memory complexity of the solution is constant, O(1).
-*/
+The memory complexity is constant, O(1)O(1) since no extra storage is being used.
 
+Note: If the binary search was implemented recursively, there would be implicit O(logn)O(logn) memory usage on the function call stack. We, however, will be focusing on the iterative solution here.
+ */
 
-let findLeastCommonNumber = function(a, b, c) {
-    let i = 0;
-    let j = 0;
-    let k = 0;
+let findLowIndex = function(arr, key) {
+    let low = 0;
+    let high = arr.length - 1;
+    let mid = Math.floor(high / 2);
   
-    while (i < a.length && j < b.length && k < c.length) {
+    while (low <= high) {
   
-      // Finding the smallest common number
-      if (a[i] === b[j]
-         && b[j] === c[k]) {
-        return a[i];
+      let midElem = arr[mid];
+  
+      if (midElem < key) {
+        low = mid + 1;
+      } else {
+        high = mid - 1;
       }
   
-      // Let's increment the iterator
-      // for the smallest value.
-  
-      if (a[i] <= b[j] && a[i] <= c[k]) {
-        i++;
-      } 
-  
-      else if (b[j] <= a[i] && b[j] <= c[k]) {
-        j++;
-      }
-       
-      else if (c[k] <= a[i] && c[k] <= b[j]) {
-        k++;
-      }
-      
+      mid = low + Math.floor((high - low) / 2);
+    }
+    
+    if (low < arr.length && arr[low] === key) {
+      return low;
     }
   
     return -1;
   };
   
-  let v1 = [6, 7, 10, 25, 30, 63, 64];
-  let v2 = [1, 4, 5, 6, 7, 8, 50];
-  let v3 = [1, 6, 10, 14];
-  console.log("Least Common Number: " + findLeastCommonNumber(v1, v2, v3));
+  let findHighIndex = function(arr, key) {
+    let low = 0;
+    let high = arr.length - 1;
+    let mid = Math.floor(high / 2);
+  
+    while (low <= high) {
+      let midElem = arr[mid];
+  
+      if (midElem <= key) {
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+  
+      mid = low + Math.floor((high - low) / 2);
+    }
+  
+    if (high === -1){
+      return high
+    }
+    
+    if (high < arr.length && arr[high] === key) {
+      return high;
+    }
+  
+    return -1;
+  };
+  
+  let array = [1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 6, 6, 6];
+  
+  var key = 5;
+  console.log("Low Index of " + key + ": " + (findLowIndex(array, key)));
+  console.log("High Index of " + key + ": " + (findHighIndex(array, key)));
+  
+  key = -2;
+  console.log("Low Index of " + key + ": " + (findLowIndex(array, key)));
+  console.log("High Index of " + key + ": " + (findHighIndex(array, key)));
