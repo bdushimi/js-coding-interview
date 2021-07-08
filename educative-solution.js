@@ -1,75 +1,48 @@
 /**
  * Solution #
 Runtime complexity #
-Since we are using binary search, the runtime complexity is logarithmic, O(logn)O(logn).
-
-Even though we do the binary search twice, asymptotic runtime complexity is still O(logn)O(logn).
+The runtime complexity if this solution is linear, O(n)O(n).
 
 Memory complexity #
-The memory complexity is constant, O(1)O(1) since no extra storage is being used.
+The memory complexity of this solution is constant, O(1)O(1).
 
-Note: If the binary search was implemented recursively, there would be implicit O(logn)O(logn) memory usage on the function call stack. We, however, will be focusing on the iterative solution here.
+We will keep two markers: read_index and write_index and point them to the end of the array. Let’s take a look at an overview of the algorithm:
+
+While moving read_index towards the start of the array:
+
+If read_index points to 0, skip.
+If read_index points to a non-zero value, write the value at read_index to write_index and decrement write_index.
+Assign zeros to all the values before the write_index and to the current position of write_index as well.
  */
 
-let findLowIndex = function(arr, key) {
-    let low = 0;
-    let high = arr.length - 1;
-    let mid = Math.floor(high / 2);
+
+let moveZerosToLeft = function(A) {
+    if (A.length < 1) {
+      return;
+    }
   
-    while (low <= high) {
+    let lengthA = A.length;
+    let writeIndex = lengthA - 1;
+    let readIndex = lengthA - 1;
   
-      let midElem = arr[mid];
-  
-      if (midElem < key) {
-        low = mid + 1;
-      } else {
-        high = mid - 1;
+    while (readIndex >= 0) {
+      if (A[readIndex] != 0) {
+        A[writeIndex] = A[readIndex];
+        writeIndex--;
       }
-  
-      mid = low + Math.floor((high - low) / 2);
+      
+      readIndex--;
     }
     
-    if (low < arr.length && arr[low] === key) {
-      return low;
+    while (writeIndex >= 0) {
+      A[writeIndex] = 0;
+      writeIndex--;
     }
-  
-    return -1;
   };
   
-  let findHighIndex = function(arr, key) {
-    let low = 0;
-    let high = arr.length - 1;
-    let mid = Math.floor(high / 2);
+  let v = [1, 10, 20, 0, 59, 63, 0, 88, 0];
+  console.log("Original Array: [" + v + "]");
   
-    while (low <= high) {
-      let midElem = arr[mid];
+  moveZerosToLeft(v);
   
-      if (midElem <= key) {
-        low = mid + 1;
-      } else {
-        high = mid - 1;
-      }
-  
-      mid = low + Math.floor((high - low) / 2);
-    }
-  
-    if (high === -1){
-      return high
-    }
-    
-    if (high < arr.length && arr[high] === key) {
-      return high;
-    }
-  
-    return -1;
-  };
-  
-  let array = [1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 6, 6, 6];
-  
-  var key = 5;
-  console.log("Low Index of " + key + ": " + (findLowIndex(array, key)));
-  console.log("High Index of " + key + ": " + (findHighIndex(array, key)));
-  
-  key = -2;
-  console.log("Low Index of " + key + ": " + (findLowIndex(array, key)));
-  console.log("High Index of " + key + ": " + (findHighIndex(array, key)));
+  console.log("After Moving Zeros: [" + v+ "]");
