@@ -103,3 +103,4 @@ let binarySearchRotated = function(arr, key) {
   console.log("Key(3) found at: " + binarySearchRotated(v2, 3));
   console.log("Key(6) found at: " + binarySearchRotated(v2, 6));  
 
+// write a for loop to print a name 10 times
