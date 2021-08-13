@@ -2,105 +2,55 @@
 Iterative Solution
 Runtime complexity O(log n)
 Memory complexity O(1)
+
+
+Solution #
+Runtime complexity #
+The runtime complexity of this solution is linear, O(n)O(n).
+
+Memory complexity #
+The memory complexity of this algorithm is constant, O(1)O(1).
+
+The values in the array represent the cost of a stock each day. As we can buy and sell the stock only once, we need to find the best buy and sell prices for which our profit is maximized (or loss is minimized) over a given span of time.
+
+A naive solution, with runtime complexity of O(n^2)O(n
+​2
+​​ ), is to find the maximum gain between each element and its succeeding elements.
+
+There is a tricky linear solution to this problem that requires maintaining current_buy_price (which is the smallest number seen so far), current_profit, and global_profit as we iterate through the entire array of stock prices. At each iteration, we will compare the current_profit with the global_profit and update the global_profit accordingly.
+
+The basic algorithm is as follows:
 */
+let findBuySellStockPrices = function (array) {
+  if (!array || array.length < 2) {
+    return;
+  }
 
-let binarySearchRotated = function(arr, key) {
+  let currentBuy = array[0];
+  let globalSell = array[1];
+  let globalProfit = globalSell - currentBuy;
 
-    start = 0;
-    end = arr.length - 1;
-  
-    if (start > end){
-      return -1;
+  let currentProfit = 0;
+
+  for (let i = 1; i < array.length; i++) {
+    currentProfit = array[i] - currentBuy;
+
+    if (currentProfit > globalProfit) {
+      globalProfit = currentProfit;
+      globalSell = array[i];
     }
-  
-    while (start <= end){
-      mid = start + Math.floor((end - start) / 2);
-  
-      if (arr[mid] == key){
-        return mid;
-      }
-  
-      if (arr[start] <= arr[mid] && key <= arr[mid] && key >= arr[start]){
-        end = mid - 1;
-      }
-      
-      else if (arr[mid] <= arr[end] && key >= arr[mid] && key <= arr[end]){
-        start = mid + 1;
-      }
-  
-      else if (arr[end] <= arr[mid]){
-        start = mid + 1;
-      }
-  
-      else if (arr[start] >= arr[mid]){
-        end = mid - 1;
-      }
-      
-      else{
-        return -1;
-      }
+
+    if (currentBuy > array[i]) {
+      currentBuy = array[i];
     }
-    return -1;
-  };
-  
-  let v1 = [6, 7, 1, 2, 3, 4, 5];
-    
-  console.log("Key(3) found at: " + binarySearchRotated(v1, 3));
-  console.log("Key(6) found at: " + binarySearchRotated(v1, 6));
-      
-  let v2 = [4, 5, 6, 1, 2, 3];
-    
-  console.log("Key(3) found at: " + binarySearchRotated(v2, 3));
-  console.log("Key(6) found at: " + binarySearchRotated(v2, 6));  
+  }
+  return [globalSell - globalProfit, globalSell];
+};
 
+let arrayForStockPrices = [1, 2, 3, 4, 3, 2, 1, 2, 5];
+let result = findBuySellStockPrices(arrayForStockPrices);
+console.log("Buy Price: " + result[0] + ", Sell Price: " + result[1]);
 
-  /*
-  Solution 1: Recursive
-  Runtime complexity O(log n)
-  Memory complexity O(log n)
-  */
-
-  let binarySearch = function(arr, start, end, key) {
-    // assuming all the keys are unique.
-    if (start > end) {
-      return -1;
-    }
-  
-    let mid = start + Math.floor((end - start) / 2);
-  
-    if (arr[mid] === key) {
-      return mid;
-    }
-  
-    if (arr[start] <= arr[mid] && key <= arr[mid] && key >= arr[start]) {
-      return binarySearch(arr, start, mid - 1, key);
-    } 
-    
-    else if (arr[mid] <= arr[end] && key >= arr[mid] && key <= arr[end]) {
-      return binarySearch(arr, mid + 1, end, key);
-    } 
-    
-    else if (arr[end] <= arr[mid]) {
-      return binarySearch(arr, mid + 1, end, key);
-    } 
-    
-    else if (arr[start] >= arr[mid]) {
-      return binarySearch(arr, start, mid - 1, key);
-    } 
-    
-    return -1;
-  };
-  
-  let binarySearchRotated = function(arr, key) {
-    return binarySearch(arr, 0, arr.length - 1, key);
-  };
-  
-  let v1 = [6, 7, 1, 2, 3, 4, 5];  
-  console.log("Key(3) found at: " + binarySearchRotated(v1, 3));
-  console.log("Key(6) found at: " + binarySearchRotated(v1, 6));
-      
-  let v2 = [4, 5, 6, 1, 2, 3];
-  console.log("Key(3) found at: " + binarySearchRotated(v2, 3));
-  console.log("Key(6) found at: " + binarySearchRotated(v2, 6));  
-
-// write a for loop to print a name 10 times
+arrayForStockPrices = [8, 6, 5, 4, 3, 2, 1];
+result = findBuySellStockPrices(arrayForStockPrices);
+console.log("Buy Price: " + result[0] + ", Sell Price: " + result[1]);
