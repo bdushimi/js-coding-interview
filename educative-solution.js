@@ -1,56 +1,64 @@
 /*
-Iterative Solution
-Runtime complexity O(log n)
-Memory complexity O(1)
-
-
 Solution #
 Runtime complexity #
-The runtime complexity of this solution is linear, O(n)O(n).
+The runtime complexity of this solution is linear, O(n).
 
 Memory complexity #
-The memory complexity of this algorithm is constant, O(1)O(1).
+The memory complexity of this solution is linear, O(n).
 
-The values in the array represent the cost of a stock each day. As we can buy and sell the stock only once, we need to find the best buy and sell prices for which our profit is maximized (or loss is minimized) over a given span of time.
+This is the worst case when there are non-overlapping elements in the array.
 
-A naive solution, with runtime complexity of O(n^2)O(n
-​2
-​​ ), is to find the maximum gain between each element and its succeeding elements.
+This problem can be solved in a simple linear scan algorithm. We know that input is sorted by starting timestamps. Here is the approach we are following:
 
-There is a tricky linear solution to this problem that requires maintaining current_buy_price (which is the smallest number seen so far), current_profit, and global_profit as we iterate through the entire array of stock prices. At each iteration, we will compare the current_profit with the global_profit and update the global_profit accordingly.
+List of input intervals is given, and we’ll keep merged intervals in the output list.
+For each interval in the input list:
+If the input interval is overlapping with the last interval in output list then we’ll merge these two intervals and update the last interval of output list with merged interval.
+Otherwise, we’ll add an input interval to the output list.
+Below is a visual run-through of the above explanation.
 
-The basic algorithm is as follows:
+The green interval in the input list represents the selected input interval. The last interval in the output list is green, either it is updated by merging this interval and selected input interval or appending input interval.
 */
-let findBuySellStockPrices = function (array) {
-  if (!array || array.length < 2) {
-    return;
-  }
 
-  let currentBuy = array[0];
-  let globalSell = array[1];
-  let globalProfit = globalSell - currentBuy;
 
-  let currentProfit = 0;
 
-  for (let i = 1; i < array.length; i++) {
-    currentProfit = array[i] - currentBuy;
 
-    if (currentProfit > globalProfit) {
-      globalProfit = currentProfit;
-      globalSell = array[i];
+class Pair {
+    constructor(first, second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+
+let mergeIntervals = function (v) {
+    if (!v || v.length === 0) {
+        return;
     }
 
-    if (currentBuy > array[i]) {
-      currentBuy = array[i];
+    let result = [];
+    result.push(new Pair(v[0].first, v[0].second));
+
+    for (let i = 0; i < v.length; i++) {
+        let x1 = v[i].first;
+        let y1 = v[i].second;
+        let x2 = result[result.length - 1].first;
+        let y2 = result[result.length - 1].second;
+
+        if (y2 >= x1) {
+            result[result.length - 1].second = Math.max(y1, y2);
+        } else {
+            result.push(new Pair(x1, y1));
+        }
     }
-  }
-  return [globalSell - globalProfit, globalSell];
+    return result;
 };
 
-let arrayForStockPrices = [1, 2, 3, 4, 3, 2, 1, 2, 5];
-let result = findBuySellStockPrices(arrayForStockPrices);
-console.log("Buy Price: " + result[0] + ", Sell Price: " + result[1]);
+let v = [new Pair(1, 5), new Pair(3, 7), new Pair(4, 6),
+new Pair(6, 8), new Pair(10, 12), new Pair(11, 15)];
 
-arrayForStockPrices = [8, 6, 5, 4, 3, 2, 1];
-result = findBuySellStockPrices(arrayForStockPrices);
-console.log("Buy Price: " + result[0] + ", Sell Price: " + result[1]);
+let result = mergeIntervals(v)
+
+let result_str = ""
+for (let i = 0; i < result.length; i++) {
+    result_str = result_str + "[" + result[i].first + ", " + result[i].second + "] "
+}
+console.log(result_str)
