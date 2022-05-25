@@ -1,21 +1,23 @@
-function find_averages_of_subarrays(K, arr) {
-    const result = [];
+const max_sub_array_of_size_k = function (K, arr) {
+    // TODO: Write your code here
 
-    // Get the sum of the first K elements
-    let sum = arr.slice(0, K).reduce((a, b) => a + b)
-
-    // Push the first results
-    result.push(sum / K)
+    // Find sum of the first K elements
+    let maxSum = arr.slice(0, K).reduce((a, b) => a + b);
+    let sumTemp = maxSum
+    console.log("Init Max Sum", maxSum)
 
     for (let i = 0; i < arr.length - K; i++) {
-        sum = sum - arr[i];
-        sum = sum + arr[i + K]
-        result.push(sum / K); // calculate average
+        sumTemp = sumTemp - arr[i];
+        sumTemp = sumTemp + arr[K+i]
+
+        console.log("Temp Max Sum", sumTemp)
+        if (sumTemp > maxSum) maxSum = sumTemp
     }
 
-    return result;
-}
+    return maxSum;
+};
 
 
-const result = find_averages_of_subarrays(6, [1, 3, 2, 6, -1, 4, 1, 8, 2]);
-console.log(`Averages of subarrays of size K: ${result}`);
+
+console.log(`Maximum sum of a subarray of size K: ${max_sub_array_of_size_k(4, [2, 1, 5, 1, 3, 2])}`);
+console.log(`Maximum sum of a subarray of size K: ${max_sub_array_of_size_k(4, [2, 3, 4, 1, 5])}`);

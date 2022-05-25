@@ -1,31 +1,37 @@
-Introduction
+Problem Statement#
 
-In many problems dealing with an array (or a LinkedList), we are asked to find or calculate something among all the subarrays (or sublists) of a given size. For example, take a look at this problem:
+Given an array of positive numbers and a positive number ‘k,’ find the maximum sum of any contiguous subarray of size ‘k’.
 
-    Given an array, find the average of all subarrays of ‘K’ contiguous elements in it.
+Example 1:
 
-Let’s understand this problem with a real input:
+Input: [2, 1, 5, 1, 3, 2], k=3 
+Output: 9
+Explanation: Subarray with maximum sum is [5, 1, 3].
 
-Array: [1, 3, 2, 6, -1, 4, 1, 8, 2], K=5
+Example 2:
 
-Here, we are asked to find the average of all subarrays of ‘5’ contiguous elements in the given array. Let’s solve this:
+Input: [2, 3, 4, 1, 5], k=2 
+Output: 7
+Explanation: Subarray with maximum sum is [3, 4].
 
-    For the first 5 numbers (subarray from index 0-4), the average is: (1+3+2+6−1)/5=>2.2(1+3+2+6-1)/5 => 2.2(1+3+2+6−1)/5=>2.2
-    The average of next 5 numbers (subarray from index 1-5) is: (3+2+6−1+4)/5=>2.8(3+2+6-1+4)/5 => 2.8(3+2+6−1+4)/5=>2.8
-    For the next 5 numbers (subarray from index 2-6), the average is: (2+6−1+4+1)/5=>2.4(2+6-1+4+1)/5 => 2.4(2+6−1+4+1)/5=>2.4
-    …
+Solution#
 
-Here is the final output containing the averages of all subarrays of size 5:
+A basic brute force solution will be to calculate the sum of all ‘k’ sized subarrays of the given array to find the subarray with the highest sum. We can start from every index of the given array and add the next ‘k’ elements to find the subarray’s sum. Following is the visual representation of this algorithm for Example-1:
 
-Output: [2.2, 2.8, 2.4, 3.6, 2.8]
 
-Time complexity: Since for every element of the input array, we are calculating the sum of its next ‘K’ elements, the time complexity of the above algorithm will be O(N∗K)O(N*K)O(N∗K) where ‘N’ is the number of elements in the input array.
+The above algorithm’s time complexity will be O(N∗K)O(N*K)O(N∗K), where ‘N’ is the total number of elements in the given array. Is it possible to find a better algorithm than this?
+A better approach#
 
-Can we find a better solution? Do you see any inefficiency in the above approach?
+If you observe closely, you will realize that to calculate the sum of a contiguous subarray, we can utilize the sum of the previous subarray. For this, consider each subarray as a Sliding Window of size ‘k.’ To calculate the sum of the next subarray, we need to slide the window ahead by one element. So to slide the window forward and calculate the sum of the new position of the sliding window, we need to do two things:
 
-The inefficiency is that for any two consecutive subarrays of size ‘5’, the overlapping part (which will contain four elements) will be evaluated twice. For example, take the above-mentioned input:
+    Subtract the element going out of the sliding window, i.e., subtract the first element of the window.
+    Add the new element getting included in the sliding window, i.e., the element coming right after the end of the window.
 
-As you can see, there are four overlapping elements between the subarray (indexed from 0-4) and the subarray (indexed from 1-5). Can we somehow reuse the sum we have calculated for the overlapping elements?
+This approach will save us from re-calculating the sum of the overlapping part of the sliding window. 
 
-The efficient way to solve this problem would be to visualize each subarray as a sliding window of ‘5’ elements.
-To reuse the sum from the previous subarray, we will subtract the element going out of the window and add the element now being included in the sliding window. This will save us from going through the whole subarray to find the sum and, as a result, the algorithm complexity will reduce to O(N)O(N)O(N).
+Time Complexity#
+
+The time complexity of the above algorithm will be O(N)O(N)O(N).
+Space Complexity#
+
+The algorithm runs in constant space O(1)O(1)O(1).
