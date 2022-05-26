@@ -31,3 +31,12 @@ This problem follows the Sliding Window pattern, and we can use a similar strate
     In each step, we will also try to shrink the window from the beginning. We will shrink the window until the window’s sum is smaller than ‘S’ again. This is needed as we intend to find the smallest window. This shrinking will also happen in multiple steps; in each step, we will do two things:
         Check if the current window length is the smallest so far, and if so, remember its length.
         Subtract the first element of the window from the running sum to shrink the sliding window.
+
+
+
+Time Complexity#
+
+The time complexity of the above algorithm will be O(N)O(N)O(N). The outer for loop runs for all elements, and the inner while loop processes each element only once; therefore, the time complexity of the algorithm will be O(N+N)O(N+N)O(N+N), which is asymptotically equivalent to O(N)O(N)O(N).
+Space Complexity#
+
+The algorithm runs in constant space O(1)O(1)O(1).
