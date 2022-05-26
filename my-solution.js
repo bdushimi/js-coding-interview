@@ -3,7 +3,7 @@ const smallest_subarray_sum = function (s, arr) {
     let tempSum = 0;
     let windowStart = 0;
     let windowEnd = 1;
-    let minWindowSize = 9000;
+    let minWindowSize = Infinity;
     let tempMinSize = 1;
 
 
