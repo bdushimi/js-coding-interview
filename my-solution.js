@@ -1,23 +1,35 @@
-const max_sub_array_of_size_k = function (K, arr) {
+const smallest_subarray_sum = function (s, arr) {
     // TODO: Write your code here
+    let tempSum = 0;
+    let windowStart = 0;
+    let windowEnd = 1;
+    let minWindowSize = 9000;
+    let tempMinSize = 1;
 
-    // Find sum of the first K elements
-    let maxSum = arr.slice(0, K).reduce((a, b) => a + b);
-    let sumTemp = maxSum
-    console.log("Init Max Sum", maxSum)
 
-    for (let i = 0; i < arr.length - K; i++) {
-        sumTemp = sumTemp - arr[i];
-        sumTemp = sumTemp + arr[K+i]
+    while (windowEnd <= arr.length) {
 
-        console.log("Temp Max Sum", sumTemp)
-        if (sumTemp > maxSum) maxSum = sumTemp
+        let tempArr = arr.slice(windowStart, windowEnd + 1);
+        tempSum = tempArr.reduce((a, b) => a + b);
+
+        if (tempSum >= s) {
+
+            // Get the size of the tempArr
+            tempMinSize = tempArr.length;
+
+            // Check if the current tempArr is or equal to the min. Update if so
+            if (tempMinSize <= minWindowSize) {
+                minWindowSize = tempMinSize
+            }
+
+            windowStart++
+            windowEnd = windowStart;
+        }
+        windowEnd++
     }
-
-    return maxSum;
+    return minWindowSize;
 };
 
-
-
-console.log(`Maximum sum of a subarray of size K: ${max_sub_array_of_size_k(4, [2, 1, 5, 1, 3, 2])}`);
-console.log(`Maximum sum of a subarray of size K: ${max_sub_array_of_size_k(4, [2, 3, 4, 1, 5])}`);
+console.log(`Smallest subarray length: ${smallest_subarray_sum(7, [2, 1, 5, 2, 3, 2])}`);
+console.log(`Smallest subarray length: ${smallest_subarray_sum(8, [3, 4, 1, 1, 6])}`);
+console.log(`Smallest subarray length: ${smallest_subarray_sum(7, [2, 1, 5, 2, 3, 2])}`);
