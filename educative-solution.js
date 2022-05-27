@@ -1,26 +1,32 @@
-function smallest_subarray_sum(s, arr) {
-    let minLength = Infinity;
-    let windowSum = 0;
-    let windowStart = 0;
+function longest_substring_with_k_distinct(str, k) {
+    let windowStart = 0,
+        maxLength = 0,
+        charFrequency = {};
 
-    for (let windowEnd = 0; windowEnd < arr.length; windowEnd++) {
-        windowSum += arr[windowEnd]; // add the next element
-
-        // shrink the window as small as possible until the 'window_sum' is smaller than 's'
-        while (windowSum >= s) {
-            minLength = Math.min(minLength, windowEnd - windowStart + 1);
-            windowSum -= arr[windowStart]
-            windowStart += 1 // sliding the window
+    // in the following loop we'll try to extend the range [window_start, window_end]
+    for (let windowEnd = 0; windowEnd < str.length; windowEnd++) {
+        const rightChar = str[windowEnd];
+        if (!(rightChar in charFrequency)) {
+            charFrequency[rightChar] = 0;
         }
+        charFrequency[rightChar] += 1;
+        // shrink the sliding window, until we are left with 'k' distinct characters in the char_frequency
+        while (Object.keys(charFrequency).length > k) {
+            const leftChar = str[windowStart];
+            charFrequency[leftChar] -= 1;
+            if (charFrequency[leftChar] === 0) {
+                delete charFrequency[leftChar];
+            }
+            windowStart += 1; // shrink the window
+        }
+        // remember the maximum length so far
+        maxLength = Math.max(maxLength, windowEnd - windowStart + 1);
     }
 
-    if (minLength === Infinity) {
-        return 0;
-    }
-    return minLength;
+    return maxLength;
 }
 
 
-console.log(`Smallest subarray length: ${smallest_subarray_sum(7, [2, 1, 5, 2, 3, 2])}`);
-console.log(`Smallest subarray length: ${smallest_subarray_sum(8, [3, 4, 1, 1, 6])}`);
-console.log(`Smallest subarray length: ${smallest_subarray_sum(7, [2, 1, 5, 2, 3, 2])}`);
+console.log(`Length of the longest substring: ${longest_substring_with_k_distinct('araaci', 2)}`);
+console.log(`Length of the longest substring: ${longest_substring_with_k_distinct('araaci', 1)}`);
+console.log(`Length of the longest substring: ${longest_substring_with_k_distinct('cbbebi', 3)}`);
