@@ -1,53 +1,57 @@
-/**
- * Solution: 
- * Runtime Complexity: O (n)
- * Memory Complexity : O (w) where w is the window size in this case
- */
+function findSumOfThree(nums, target) {
+    // Sort the input list
+    nums.sort((a, b) => {
+        return a - b;
+    });
 
-let ffindMaxSlidingWindow = function (arr, windowSize) {
-    let result = [];
+    // Fix one integer at a time and find the other two
+    for (let i = 0; i < nums.length - 2; i++) {
+        // Initialize the two pointers
+        let low = i + 1;
+        let high = nums.length - 1;
 
-    if (arr.length == 0) {
-        return result;
-    }
+        // Traverse the list to find the triplet whose sum equals the target
+        while (low < high) {
+            let triple = nums[i] + nums[low] + nums[high];
 
-    if (windowSize > arr.length) {
-        return result;
-    }
+            // The sum of the triplet equals the target
+            if (triple == target) {
+                return true;
+            }
 
-    let window_ = [];
-    //find out max for first window
-    for (let i = 0; i < windowSize; i++) {
-        while (window_.length > 0 && arr[i] >= arr[window_[window_.length - 1]]) {
-            window_.pop();
+            // The sum of the triplet is less than target, so move the low pointer forward
+            else if (triple < target) low++;
+
+            // The sum of the triplet is greater than target, so move the high pointer backward
+            else high--;
         }
-        window_.push(i);
-    }
+    };
 
-    result.push(arr[window_[0]])
+    // No such triplet found whose sum equals the given target
+    return false;
+}
 
-    for (let i = windowSize; i < arr.length; i++) {
-        // remove all numbers that are smaller than current number
-        // from the tail of list
-        while (window_.length > 0 && arr[i] >= arr[window_[window_.length - 1]]) {
-            window_.pop();
-        }
+// Driver code
+function main() {
+    let numsLists = [
+        [3, 7, 1, 2, 8, 4, 5],
+        [-1, 2, 1, -4, 5, -3],
+        [2, 3, 4, 1, 7, 9],
+        [1, -1, 0],
+        [2, 4, 2, 7, 6, 3, 1],
+    ];
 
-        //remove first number if it doesn't fall in the window anymore
-        if (window_.length > 0 && (window_[0] <= i - windowSize)) {
-            window_.shift();
-        }
+    let testLists = [10, 7, 20, -1, 8];
 
-        window_.push(i);
-        result.push(arr[window_[0]]);
-    }
-    return result;
-};
+    numsLists.map((numList, i) => {
+        console.log(i + 1 + ".\tInput array:", numsLists[i]);
 
-let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-console.log("Array = " + array);
-console.log("Max = " + ffindMaxSlidingWindow(array, 3));
+        if (findSumOfThree(numsLists[i], testLists[i]))
+            console.log("\tSum for", testLists[i], "exists");
+        else console.log("\tSum for", testLists[i], "does not exist");
 
-let array1 = [10, 6, 9, -3, 23, -1, 34, 56, 67, -1, -4, -8, -2, 9, 10, 34, 67]
-console.log("Array = " + array1);
-console.log("Max = " + ffindMaxSlidingWindow(array1, 3));
+        console.log("-".repeat(100));
+    });
+}
+
+main();

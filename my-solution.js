@@ -1,40 +1,26 @@
-const findMaxSlidingWindow = (array, window_size) => {
+const findSumOfTree = (nums, target) => {
 
-    var result = [];
+    //First sort the array in ascending order
+    nums.sort((a, b) => a - b);
 
-    const window = [];
+    for (let i = 0; i < nums.length; i++) {
+        let low = i + 1
+        let high = nums.length - 1
 
-    window.push(0)
-
-
-    // First Window
-    for (let i = 1; i < window_size; i++) {
-
-        while (window.length > 0 && array[i] >= array[window[window.length - 1]]) {
-            window.pop();
+        while (low < high) {
+            let tempTarget = nums[i] + nums[low] + nums[high]
+            if (tempTarget == target) {
+                return true
+            } else if (tempTarget > target) {
+                high--
+            } else if (tempTarget < target) {
+                low++
+            }
         }
-        window.push(i);
     }
 
-    result.push(array[window[0]]);
+    return false
 
-    // For the reminder of the array
-    for (let i = window_size; i < array.length; i++) {
-
-        // check if the first element/index in the window array is still in window range, if not remove it
-        if (window[0] <= i - window_size) window.shift();
-
-        console.log(array[window[window.length - 1]])
-        while (window.length > 0 && array[i] >= array[window[window.length - 1]]) {
-            window.pop();
-        }
-        window.push(i);
-        result.push(array[window[0]]); // this should happen after processing an individual window.
-    }
-    return result;
 }
 
-
-findMaxSlidingWindow([-4, 2, -5, 1, -1, 6], 3)
-
-
+console.log(findSumOfTree([3, 5, 20, 10, 5, 5, 8, 9, -2], 7))
