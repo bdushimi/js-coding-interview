@@ -1,57 +1,118 @@
-function findSumOfThree(nums, target) {
-    // Sort the input list
-    nums.sort((a, b) => {
-        return a - b;
-    });
-
-    // Fix one integer at a time and find the other two
-    for (let i = 0; i < nums.length - 2; i++) {
-        // Initialize the two pointers
-        let low = i + 1;
-        let high = nums.length - 1;
-
-        // Traverse the list to find the triplet whose sum equals the target
-        while (low < high) {
-            let triple = nums[i] + nums[low] + nums[high];
-
-            // The sum of the triplet equals the target
-            if (triple == target) {
-                return true;
-            }
-
-            // The sum of the triplet is less than target, so move the low pointer forward
-            else if (triple < target) low++;
-
-            // The sum of the triplet is greater than target, so move the high pointer backward
-            else high--;
-        }
-    };
-
-    // No such triplet found whose sum equals the given target
-    return false;
+// Template for linked list node class
+class LinkedListNode {
+    constructor(data, next = null) {
+        this.data = data;
+        this.next = next;
+    }
 }
 
-// Driver code
+// Template for the linked list
+class LinkedList {
+    constructor() {
+        this.head = null;
+
+        // insertNodeAtHead method will insert a LinkedListNode at head
+        // of a linked list.
+        this.insertNodeAtHead = function (node) {
+            if (this.head != null) {
+                node.next = this.head;
+                this.head = node;
+            } else this.head = node;
+        };
+
+        // createLinkedList method will create the linked list using the
+        // given integer array with the help of InsertAthead method.
+        this.createLinkedList = function (list) {
+            list.reverse().forEach((element) => {
+                let newNode = new LinkedListNode(element);
+                this.insertNodeAtHead(newNode);
+            });
+        };
+
+        // This method will display the elements of the linked list.
+        this.display = function () {
+            let result = "",
+                temp = this.head;
+            while (temp != null) {
+                result += temp.data;
+                temp = temp.next;
+                if (temp != null) {
+                    result += ", ";
+                }
+            }
+            result += "";
+            return result;
+        };
+    }
+}
+
+
+function removeNthLastNode(head, n) {
+
+    // Point two pointers, right and left, at head.
+    let right = head;
+    let left = head;
+
+    // Move right pointer n elements away from the left pointer.
+    for (let i = 0; i < n; i++) {
+        right = right.next;
+    }
+
+    // Removal of the head node.
+    if (!right) {
+        return head.next;
+    }
+
+    // Move both pointers until right pointer reaches the last node.
+    while (right.next != null) {
+        right = right.next;
+        left = left.next;
+    }
+
+    // At this point, left pointer points to (n-1)th element.
+    // So link it to next to next element of left.
+    left.next = left.next.next;
+
+    return head;
+}
+
+
+// Template for printing the linked list with forward arrows
+function printListWithForwardArrow(linkedListNode) {
+    let temp = linkedListNode;
+    let result = "";
+    while (temp != null) {
+        result += temp.data;
+        temp = temp.next;
+        if (temp != null) result += " → ";
+        // if this is the last node, print null at the end
+        else result += " → null";
+    }
+    return result;
+}
+
+// Driver Code
 function main() {
-    let numsLists = [
-        [3, 7, 1, 2, 8, 4, 5],
-        [-1, 2, 1, -4, 5, -3],
-        [2, 3, 4, 1, 7, 9],
-        [1, -1, 0],
-        [2, 4, 2, 7, 6, 3, 1],
+    const inputs = [
+        [23, 89, 10, 5, 67, 39, 70, 28],
+        [34, 53, 6, 95, 38, 28, 17, 63, 16, 76],
+        [288, 224, 275, 390, 4, 383, 330, 60, 193],
+        [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        [69, 8, 49, 106, 116, 112, 104, 129, 39, 14, 27, 12]
     ];
 
-    let testLists = [10, 7, 20, -1, 8];
+    const n = [4, 1, 6, 9, 11];
 
-    numsLists.map((numList, i) => {
-        console.log(i + 1 + ".\tInput array:", numsLists[i]);
-
-        if (findSumOfThree(numsLists[i], testLists[i]))
-            console.log("\tSum for", testLists[i], "exists");
-        else console.log("\tSum for", testLists[i], "does not exist");
-
+    for (let i = 0; i < inputs.length; i++) {
+        const inputLinkedList = new LinkedList();
+        inputLinkedList.createLinkedList(inputs[i]);
+        console.log((i + 1) + ".\tLinked List:\t\t", printListWithForwardArrow(inputLinkedList.head));
+        console.log("\tn = " + n[i]);
+        let result = removeNthLastNode(inputLinkedList.head, n[i]);
+        console.log("\tUpdated Linked List:\t", printListWithForwardArrow(result));
         console.log("-".repeat(100));
-    });
+    }
 }
+
 
 main();
