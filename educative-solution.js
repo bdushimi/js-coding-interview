@@ -1,118 +1,61 @@
-// Template for linked list node class
-class LinkedListNode {
-    constructor(data, next = null) {
-        this.data = data;
-        this.next = next;
-    }
-}
+function sortColors(colors) {
 
-// Template for the linked list
-class LinkedList {
-    constructor() {
-        this.head = null;
+    // Initialize the red, white, and blue pointers
+    let red = 0;
+    let white = 0;
+    let blue = colors.length - 1;
 
-        // insertNodeAtHead method will insert a LinkedListNode at head
-        // of a linked list.
-        this.insertNodeAtHead = function (node) {
-            if (this.head != null) {
-                node.next = this.head;
-                this.head = node;
-            } else this.head = node;
-        };
+    while (white <= blue) {
 
-        // createLinkedList method will create the linked list using the
-        // given integer array with the help of InsertAthead method.
-        this.createLinkedList = function (list) {
-            list.reverse().forEach((element) => {
-                let newNode = new LinkedListNode(element);
-                this.insertNodeAtHead(newNode);
-            });
-        };
+        // If the white pointer is pointing to red
+        if (colors[white] === 0) {
 
-        // This method will display the elements of the linked list.
-        this.display = function () {
-            let result = "",
-                temp = this.head;
-            while (temp != null) {
-                result += temp.data;
-                temp = temp.next;
-                if (temp != null) {
-                    result += ", ";
-                }
+            // Swap the values if the red pointer is not pointing to red
+            if (colors[red] !== 0) {
+                [colors[red], colors[white]] = [colors[white], colors[red]];
             }
-            result += "";
-            return result;
-        };
+
+            // Increment both the red and white pointers
+            white++;
+            red++;
+        }
+
+        // If the white pointer is pointing to white, no swapping is required
+        // Just increment the white pointer
+        else if (colors[white] === 1) {
+            white++;
+        }
+
+        // If the white pointer is pointing to blue
+        else {
+
+            // Swap the values if the blue pointer is not pointing to blue
+            if (colors[blue] !== 2) {
+                [colors[white], colors[blue]] = [colors[blue], colors[white]];
+            }
+
+            // Decrement the blue pointer
+            blue--;
+        }
     }
+
+    return colors;
 }
 
+// Driver code
+const inputs = [
+    [0, 1, 0],
+    [1, 1, 0, 2],
+    [2, 1, 1, 0, 0],
+    [2, 2, 2, 0, 1, 0],
+    [2, 1, 1, 0, 1, 0, 2]
+];
 
-function removeNthLastNode(head, n) {
+// Iterate over the inputs and print the sorted array for each
+for (let i = 0; i < inputs.length; i++) {
 
-    // Point two pointers, right and left, at head.
-    let right = head;
-    let left = head;
+    console.log(i + 1 + ".\tcolors:", arrayToString(inputs[i]),
+        "\n\n\tThe sorted array is:", arrayToString(sortColors(inputs[i])));
 
-    // Move right pointer n elements away from the left pointer.
-    for (let i = 0; i < n; i++) {
-        right = right.next;
-    }
-
-    // Removal of the head node.
-    if (!right) {
-        return head.next;
-    }
-
-    // Move both pointers until right pointer reaches the last node.
-    while (right.next != null) {
-        right = right.next;
-        left = left.next;
-    }
-
-    // At this point, left pointer points to (n-1)th element.
-    // So link it to next to next element of left.
-    left.next = left.next.next;
-
-    return head;
+    console.log("-".repeat(100));
 }
-
-
-// Template for printing the linked list with forward arrows
-function printListWithForwardArrow(linkedListNode) {
-    let temp = linkedListNode;
-    let result = "";
-    while (temp != null) {
-        result += temp.data;
-        temp = temp.next;
-        if (temp != null) result += " → ";
-        // if this is the last node, print null at the end
-        else result += " → null";
-    }
-    return result;
-}
-
-// Driver Code
-function main() {
-    const inputs = [
-        [23, 89, 10, 5, 67, 39, 70, 28],
-        [34, 53, 6, 95, 38, 28, 17, 63, 16, 76],
-        [288, 224, 275, 390, 4, 383, 330, 60, 193],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        [69, 8, 49, 106, 116, 112, 104, 129, 39, 14, 27, 12]
-    ];
-
-    const n = [4, 1, 6, 9, 11];
-
-    for (let i = 0; i < inputs.length; i++) {
-        const inputLinkedList = new LinkedList();
-        inputLinkedList.createLinkedList(inputs[i]);
-        console.log((i + 1) + ".\tLinked List:\t\t", printListWithForwardArrow(inputLinkedList.head));
-        console.log("\tn = " + n[i]);
-        let result = removeNthLastNode(inputLinkedList.head, n[i]);
-        console.log("\tUpdated Linked List:\t", printListWithForwardArrow(result));
-        console.log("-".repeat(100));
-    }
-}
-
-
-main();
